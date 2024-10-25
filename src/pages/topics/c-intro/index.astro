@@ -1,19 +1,19 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import Card from '@components/Card.astro';
+import MyEditor from '@components/MyEditor.jsx';
+
 ---
 
 <Layout title="Welcome to Astro.">
 
-	<h1>Minerva</h1>
+	<h1>Minerva Editor</h1>
+	
+	<MyEditor client:load />
 
 </Layout>
 
-<style is:global>
-body {
-	white-space: pre-wrap;
-}
+<style>
+
 </style>
-
-
 
