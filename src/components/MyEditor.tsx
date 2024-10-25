@@ -17,7 +17,7 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
   const [output, setOutput] = React.useState(undefined);
 
   function checkCode() {
-    fetch("/topics/c-intro/operators.json", {
+    fetch("/api/compile-check", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -29,7 +29,6 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
       }),
     })
       .then((res) => {
-        console.dir(res);
         if (res.ok) {
           return res.json();
         }
@@ -40,11 +39,12 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
         setStdout(data.stdout);
         setOutput(data.value);
       })
-      .catch((err) => setStderr(err.toString()));
+      .catch((err) => {
+        setStderr(err.toString())});
   }
 
   return (
-    <React.Fragment>
+    <div>
       <Editor
         value={code}
         onValueChange={setCode}
@@ -57,6 +57,6 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
       <p className="out">{stderr}</p>
       <h1>stdout</h1>
       <p className="out">{stdout}</p>
-    </React.Fragment>
+    </div>
   );
 }

@@ -1,0 +1,70 @@
+---
+import Layout from '@layouts/Layout.astro';
+import MyEditor from '@components/MyEditor.jsx';
+
+import { getEntry } from 'astro:content';
+
+
+const { slug } = Astro.params;
+if (slug === undefined) {
+	throw new Error("Slug should always be present!")
+}
+
+const lesson = await getEntry('c-intro', slug?.toLowerCase());
+if (lesson === undefined) {
+	return Astro.redirect("/topics/c-intro/")
+}
+
+const { Content } = await lesson.render()
+
+const initialCode = `
+int add(int a, int b) {
+	// Your implementation
+}
+`
+
+---
+
+<Layout title="Welcome to Astro.">
+
+	<a href="/topics/c-intro/">Back</a>
+
+	<h1>{lesson.data.title}</h1>
+
+	<div class="split">
+
+		<div style="width: 50%;">
+			<Content/>
+		</div>
+		
+		<div class="editor">
+
+			<MyEditor
+				client:load 
+				initialCode={initialCode}
+			/>
+		</div>
+
+	</div>
+
+</Layout>
+
+<style>
+.split {
+	padding: 2rem;
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+}
+.editor {
+	white-space: pre-wrap;
+}
+</style>
+
+<style is:global >
+.out {
+	font-family: monospace;
+}
+</style>
+
+

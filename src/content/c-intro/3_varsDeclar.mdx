@@ -1,0 +1,60 @@
+---
+title: "Vars Declar"
+---
+There are times we don't know from the beginning what value a variable has. For example, you're going to the supermarket to buy some apples. Do you know precisely how many apples you will end up buying? Probably not, but if you do, that's awesome :)
+
+Let's say we don't know.
+
+```c
+#include <stdio.h>
+
+int main(){
+
+	int apples;
+	apples = 5;
+	
+	printf("%d", apples);
+}
+```
+
+This program prints 5. So we knew we were going to have some apples, but had no idea how many. So we declared a variable apples, of type int (for example, apples = 3.5 is wrong)
+
+On the way home we noticed we must've bought 12 apples, not 5. So we turn back to the supermarket to buy 7 more.
+
+```c
+#include <stdio.h>
+
+int main(){
+
+	int apples;
+	apples = 5;
+	printf("%d", apples);
+	
+	apples = apples + 7;
+	printf("%d", apples);
+}
+```
+
+Now we see 5 and 12 in the console. Why? 
+The first printf has been already covered above.
+
+apples = apples + 7; first of all, we look at the right of = and wee see apples + 7. So basically we take the current value of apples (5) and add it to 7. We get 12 (5 + 7). This 12 is then assigned to what it is on the left of = (often in programming we don't look from left to right, but from right to left)
+Now apples is not 5 anymore, but 12.
+
+---
+
+The programm shown below is not working. Fix it so it prints 15.
+
+
+```c
+#include <stdio.h>
+
+int main(){
+	
+	int x;
+	x = 10;
+	
+	x =  ;
+	printf("%d", x);
+}
+```

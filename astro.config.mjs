@@ -4,9 +4,11 @@ import react from '@astrojs/react';
 
 import node from '@astrojs/node';
 
+import mdx from '@astrojs/mdx';
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
+  integrations: [react(), mdx()],
   output: 'server',
 
   adapter: node({

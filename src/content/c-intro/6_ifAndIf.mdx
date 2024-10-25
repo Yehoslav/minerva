@@ -1,0 +1,75 @@
+---
+title: "If and If"
+---
+Again, if we feel thirsty, we drink water. But there are other conditions: if I am thirsty and if the bottle is open and if the water is cold and if my teacher gives me permission to drink, then I can drink water.
+
+```c
+#include <stdio.h>
+
+int main(){
+	int thirsty = 1; // 1 means I am thirsty, 0 means I am not
+	int isBottleOpen = 0; // bottle is not open
+	int isWaterCold = 1; // water is cold
+	int permission = 0; // teacher doesn't allow me to drink water yet
+	
+	permission = 1; // teacher gives me permission to drink
+	
+	if(thirsty == 1){
+		if(isBottleOpen == 1){
+			if(isWaterCold == 1){
+				if(permission == 1){
+					printf("I can drink water");
+				}
+			}
+		}
+	}
+}
+```
+
+The program doesn't print anything. Why? Because my bottle of water is not open :) so the second if is false, because isBottleOpen = 0 (we haven't changed that). If we want to reach printf, we must go through all if statements and all be evaluated to true.
+
+```c
+#include <stio.h>
+int main(){
+	int thirsty = 1; // 1 means I am thirsty, 0 means I am not
+	int isBottleOpen = 0; // bottle is not open
+	int isWaterCold = 1; // water is cold
+	int permission = 0; // teacher doesn't allow me to drink water yet
+	
+	permission = 1; // teacher gives me permission to drink
+	isBottleOpen = 1; // now I can open the bottle
+	
+	if(thirsty == 1){ // if I am thirsty
+		if(isBottleOpen == 1){ // and if bottle is open
+			if(isWaterCold == 1){ // and if water is cold
+				if(permission == 1){ // and if I have my teacher's permission
+					printf("I can drink water");
+				}
+			}
+		}
+	}
+}
+```
+
+This indeed prints I can drink water
+
+*************************
+At the moment, it's not raining, so I don't need an umbrella. Let's say it starts raining. Complete the code so that It rains outside, so I gotta take my pink umbrella can be printed on the screen. 
+Note: don't forget to make de rain happen :) At the moment it's not raining.
+
+```
+#include <stdio.h>
+
+int main(){
+
+	int itRains = 0;
+	int needUmbrella = 0;
+	
+	if(){ 
+		if(){
+			printf("It rains outside, so I gotta take my pink umbrella");
+		}
+	}
+
+}
+```

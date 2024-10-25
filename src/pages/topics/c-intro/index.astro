@@ -1,19 +1,11 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Card from '@components/Card.astro';
-import MyEditor from '@components/MyEditor.jsx';
-
+const matches = await import.meta.glob('src/content/c-intro/*.mdx', { eager: true });
+const posts = Object.values(matches);
 ---
 
-<Layout title="Welcome to Astro.">
-
-	<h1>Minerva Editor</h1>
-	
-	<MyEditor client:load />
-
-</Layout>
-
-<style>
-
-</style>
-
+<ul>
+	{posts.map(function(post) {
+	const slug = post.url.split('/').at(-1).split(".").at(0);
+	return <li><a href={`/topics/c-intro/${slug}`}>{post.frontmatter.title}</a></li>;
+	})}
+</ul>

@@ -11,6 +11,8 @@ mkShell {
     tailwindcss-language-server
     pnpm
 
+    quick-lint-js
+
     nodePackages.typescript-language-server 
     nodePackages.vscode-langservers-extracted
   ];

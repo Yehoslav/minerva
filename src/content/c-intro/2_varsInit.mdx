@@ -1,0 +1,44 @@
+---
+title: "Vars Int"
+---
+
+Let's say we have 2 cans of soda. How can we store this information? How to tell our computer that we have 2 cans of soda and not 10? If we buy 2 more, than we have 4 cans, right? 
+
+```c
+#include <stdio.h>
+
+int main(){
+
+	int cans = 2;
+
+}
+```
+
+We just told our computer that we have 2 cans of soda. Let's break the statement into pieces.
+First of all, we look at cans which is the name of the variable. Think of a variable as a container that contains an information about something. In our case, the variable called cans contains the information about how many cans we have. How many? Well, there's 2 :)
+Secondly, we see an equal sign which tell the computer "Ok, cans is equal to 2", so we assign what it is on the right side of = to what it is on the left side of =.
+Last to end, we have something called int. That tells the computer "cans is a variable that will eventually hold an integer value", that is 1, 4, 10, -100, 2024, 0 and so on.
+Finally, at the end of each statement, we have to place a semicolon.
+
+
+```c
+#include <stdio.h>
+
+int main(){
+
+	int slicesOfPizza = 8;
+	printf("%d", slicesOfPizza);	
+
+}
+```
+
+This program prints 8 in the console. We notice the %d. This acts as a placeholder. 
+%d is replaced by the value of slicesOfPizza. And yes, there's a comma after "%d" (we'll see later why)
+
+---
+
+Write a program that:
+1) has a variable called speed, of type int, that holds the value 100
+2) has a second variable called x, of type int, that holds the value -12345
+3) use a printf to show the value of speed in the console
+4) user a printf to show the value of x in the console
