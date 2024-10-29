@@ -1,6 +1,39 @@
 ---
 title: "Vars Int"
+exercises:
+    - condition: |
+        Write a program that:
+        1) has a variable called speed, of type int, that holds the value 100
+        2) has a second variable called x, of type int, that holds the value -12345
+        3) use a printf to show the value of speed in the console
+        4) user a printf to show the value of x in the console
+
+    - init_code: |
+        #include <stdio.h> // Exposes the printf function
+        
+        int main() {
+            // Your code goes here
+        }
 ---
+
+export const exercises = [
+  {
+    condition: `
+      Write a program that:
+      1) has a variable called speed, of type int, that holds the value 100
+      2) has a second variable called x, of type int, that holds the value -12345
+      3) use a printf to show the value of speed in the console
+      4) user a printf to show the value of x in the console
+    `,
+    init_code: `
+      #include <stdio.h>
+
+      int main() {
+          // Your code goes here
+      }
+    `,
+  },
+]
 
 Let's say we have 2 cans of soda. How can we store this information? How to tell our computer that we have 2 cans of soda and not 10? If we buy 2 more, than we have 4 cans, right? 
 
@@ -36,9 +69,3 @@ This program prints 8 in the console. We notice the %d. This acts as a placehold
 %d is replaced by the value of slicesOfPizza. And yes, there's a comma after "%d" (we'll see later why)
 
 ---
-
-Write a program that:
-1) has a variable called speed, of type int, that holds the value 100
-2) has a second variable called x, of type int, that holds the value -12345
-3) use a printf to show the value of speed in the console
-4) user a printf to show the value of x in the console

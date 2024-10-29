@@ -17,7 +17,7 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
   const [output, setOutput] = React.useState(undefined);
 
   function checkCode() {
-    fetch("/api/compile-check", {
+    fetch("/api/compile", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -40,6 +40,8 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
         setOutput(data.value);
       })
       .catch((err) => {
+        console.log("The error is:")
+        console.dir(err)
         setStderr(err.toString())});
   }
 

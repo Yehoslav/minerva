@@ -46,24 +46,25 @@ int main(){
 ```
 
 Note that:
-3 &lt; 4 is evaluated to true (1), because 3 is indeed less than 4
-10 &lt; 5 is evaluated to false (0)
-6 &lt;= 6 is evaluated to true (1) because 6 is less than or equal to 6
-7 &gt;= 7 is evaluated to true(1)
+- 3  &lt;  4 is evaluated to true (1), because 3 is indeed less than 4
+- 10 &lt;  5 is evaluated to false (0)
+- 6  &lt;= 6 is evaluated to true (1) because 6 is less than or equal to 6
+- 7  &gt;= 7 is evaluated to true(1)
  
----
-
+export const exercises = [
+  {
+    condition: `
 We want to make sure that our rocket can take off safely. This is done only when all the requirements are checked. 
 1) if wind speed is greater than 100, it's risky, so the rocket won't take off. If wind speed is less than 100 (let's say, 80), we can go to the next step.
 2) if software is not update to the latest version, the rocket won't take off
 3) if we have 4 astronauts inside the ship, then we are good to go
 
 Note: use only one if statement. Update the variables below our declarations to make the rocket take off safely
-
-```c
+`,
+    init_code: `
 #include <stdio.h>
 
-int main(){
+int main() {
 
 	int rocketReadyToTakeOff = 0; 	// not ready to take off yet - do not change this line
 	int windSpeed = 120; 		// wind speed must be below 100 - do not change this line
@@ -72,9 +73,11 @@ int main(){
 	
 	// update variables below
 	
-	if(){
+	if () {
 		printf("10 9 8 7 6 5 4 3 2 1... to the staaars!");
 	}
-
 }
-```
+`,
+  },
+]
+

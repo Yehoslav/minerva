@@ -1,6 +1,7 @@
 ---
 title: "If and If"
 ---
+
 Again, if we feel thirsty, we drink water. But there are other conditions: if I am thirsty and if the bottle is open and if the water is cold and if my teacher gives me permission to drink, then I can drink water.
 
 ```c
@@ -54,22 +55,24 @@ int main(){
 This indeed prints I can drink water
 
 *************************
-At the moment, it's not raining, so I don't need an umbrella. Let's say it starts raining. Complete the code so that It rains outside, so I gotta take my pink umbrella can be printed on the screen. 
-Note: don't forget to make de rain happen :) At the moment it's not raining.
 
-```
+export const exercises = [
+  {
+condition: `At the moment, it's not raining, so I don't need an umbrella. Let's say it starts raining. Complete the code so that It rains outside, so I gotta take my pink umbrella can be printed on the screen. 
+Note: don't forget to make de rain happen :) At the moment it's not raining.`,
+    init_code: `
 #include <stdio.h>
 
-int main(){
-
+int main() {
 	int itRains = 0;
 	int needUmbrella = 0;
 	
-	if(){ 
-		if(){
+	if () { 
+		if () {
 			printf("It rains outside, so I gotta take my pink umbrella");
 		}
 	}
-
 }
-```
+`,
+  },
+]

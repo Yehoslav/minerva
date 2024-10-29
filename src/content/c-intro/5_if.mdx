@@ -50,10 +50,13 @@ The == sign (two equals) is used to compare left to right:
 
 ************************************
 
-Complete the code so that it prints The sum is 7
 
+export const exercises = [
+  {
+    condition: `Complete the code so that it prints The sum is 7`,
+    init_code: `
+#include <stdio.h>
 
-```c
 int main(){
 
 	int sum;
@@ -61,9 +64,10 @@ int main(){
 	int b = 10;
 	sum = a + b;
 	
-	if(){ // complete this line
+	if () { // complete this line
 		printf("The sum is %d", sum);
 	}
 }
-```
-
+`,
+  },
+]
