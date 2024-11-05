@@ -4,87 +4,83 @@ import PracticePane from '@components/PracticePane.jsx';
 
 const { slug } = Astro.params;
 if (slug === undefined) {
-	throw new Error("Slug should always be present!")
+    throw new Error('Slug should always be present!');
 }
 
-const matches = await import.meta.glob('/src/content/c-intro/*.mdx', { eager: true });
+const matches = await import.meta.glob('/src/content/c-intro/*.mdx', {
+    eager: true,
+});
 
 const lesson = matches[`/src/content/c-intro/${slug}.mdx`];
 if (lesson === undefined) {
-	return Astro.redirect("/topics/c-intro/")
+    return Astro.redirect('/topics/c-intro/');
 }
-
 
 const Content = lesson.Content;
 
 const ex = lesson.exercises;
 
-const condition = ex?.at(0).condition ?? "";
+const condition = ex?.at(0).condition ?? '';
 
 const initialCode = ex?.at(0).init_code;
-console.log(initialCode)
+console.log(initialCode);
 if (ex != undefined && initialCode === undefined) {
-	throw Error("Exercise given with no initial code. Leave at least a comment!")
+    throw Error(
+        'Exercise given with no initial code. Leave at least a comment!',
+    );
 }
-
 ---
 
 <Layout title="Welcome to Astro.">
+    <!-- TODO: Implement Header -->
 
-	<!-- TODO: Implement Header -->
+    <!-- TODO: implement as bread-crumbs -->
 
-	<!-- TODO: implement as bread-crumbs -->
+    <div class="container">
+        <a href="/topics/c-intro/">Back</a>
 
-	<div class="container">
-		<a href="/topics/c-intro/">Back</a>
+        <h1>{lesson.frontmatter.title}</h1>
 
-		<h1>{lesson.frontmatter.title}</h1>
+        <div class="split">
+            <div style={{ width: ex === undefined ? '100%' : '50%' }}>
+                <Content />
+            </div>
 
-		<div class="split">
+            {
+                ex && (
+                    <div class="editor">
+                        <div>{condition}</div>
 
-			<div style={ { width: ex === undefined ? "100%" : "50%", } }>
-				<Content/>
-			</div>
-			
-			{ex && <div class="editor">
-				<div>{condition}</div>
+                        <PracticePane client:load initialCode={initialCode} />
+                    </div>
+                )
+            }
+        </div>
+    </div>
 
-				<PracticePane
-					client:load 
-					initialCode={initialCode}
-				/>
-			</div> }
-
-		</div>
-	</div>
-
-	<!-- TODO: Implement Footer -->
-
+    <!-- TODO: Implement Footer -->
 </Layout>
 
 <style>
+    .container {
+        padding: 0 2rem;
+    }
 
-.container {
-	padding: 0 2rem;
-}
-
-.split {
-	display: flex;
-	flex-direction: row;
-	gap: 1rem;
-}
-.editor {
-	white-space: pre-wrap;
-}
+    .split {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    .editor {
+        white-space: pre-wrap;
+    }
 </style>
 
-<style is:global >
-pre {
-	padding: 0.5rem;
-}
-.out {
-	font-family: monospace;
-}
+<style is:global>
+    pre {
+        padding: 0.5rem;
+    }
+    .out {
+        font-family: monospace;
+    }
 </style>
-
-

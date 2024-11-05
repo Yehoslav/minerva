@@ -5,6 +5,7 @@ mkShell {
   buildInputs = [
     jq
     htmlq
+    bubblewrap
 
     emmet-ls
     nodejs-slim

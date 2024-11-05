@@ -1,11 +1,21 @@
 ---
-const matches = await import.meta.glob('src/content/c-intro/*.mdx', { eager: true });
+const matches = await import.meta.glob('src/content/c-intro/*.mdx', {
+    eager: true,
+});
 const posts = Object.values(matches);
 ---
 
 <ul>
-	{posts.map(function(post) {
-	const slug = post.url.split('/').at(-1).split(".").at(0);
-	return <li><a href={`/topics/c-intro/${slug}`}>{post.frontmatter.title}</a></li>;
-	})}
+    {
+        posts.map(function (post) {
+            const slug = post.url.split('/').at(-1).split('.').at(0);
+            return (
+                <li>
+                    <a href={`/topics/c-intro/${slug}`}>
+                        {post.frontmatter.title}
+                    </a>
+                </li>
+            );
+        })
+    }
 </ul>

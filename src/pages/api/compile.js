@@ -1,67 +1,101 @@
 // @ts-check
 
-import fs from "node:fs/promises";
+import fs from 'node:fs/promises';
 
-import child_process from "node:child_process";
-import { promisify } from "node:util";
+import child_process from 'node:child_process';
+import { promisify } from 'node:util';
+
+/** @type {(cmd: string) => Promise<{stdout: string, stderr: string}>} */
 const exec = promisify(child_process.exec);
 
-export async function POST({ request }) {
-  const data = await request.json();
-  console.dir(data);
+class Path {
+    /** @param {string} path */
+    constructor(path) {
+        try {
+            fs.stat(path);
+        } catch {
+            fs.mkdir(path);
+        }
+        this.path = path
+    }
 
-  if (data.code !== undefined) {
-    const out_name = "user-prg"
-    fs.writeFile(`${out_name}.c`, data.code);
+    /**
+     * @param {string} subpath
+     * @returns {Path}
+     * */
+    extend(subpath) {
+        if (subpath.at(0) === '/') { return new Path(this.path + subpath); }
+        return new Path(this.path + '/' + subpath);
+    }
+
+    get str() {
+        return this.path
+    }
+}
+
+/** @type {import("astro").APIRoute} */
+export const POST = async ({ request }) => {
+    const data = await request.json();
     let result = {
-      ok: true,
-      stderr: "empty",
-      stdout: "empty",
-      value: "success",
+        ok: true,
+        stderr: 'empty',
+        stdout: 'empty',
+        value: 'success',
     };
 
 
+    const cache_dir = new Path('/tmp/minerva');
+
+    // TODO: Get the session id from cookies, or create one if such doesn't exist
+    const temporary_session_id = 'session-id-1234';
+    const session_dir = cache_dir.extend(temporary_session_id);
+
+
+    if (data.code === undefined) {
+        return new Response(JSON.stringify({ error: 'no code provided' }), {
+            status: 503,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
+    const code_path = session_dir.extend('code/main.c');
+    await fs.writeFile(code_path.str, data.code);
+
+    const out_path = session_dir.extend('bin/main');
+
     try {
-      const { stdout, stderr } = await exec(
-        `cc -o build/c/${out_name} -Wall ${out_name}.c`
-      );
-      result.stderr = stderr;
-      result.stdout = stdout;
-    } catch (e) {
-        result.stderr = e.stdout;
-        return new Response(JSON.stringify({ error: e.stdout }), {
-          status: 503,
-          headers: {
-            "Content-Type": "application/json",
-          },
+        // TODO: compile using bwrap, so that session id is not exposed in the error messages
+        const { stderr, stdout } = await exec(
+            `cc -o ${out_path.str} -Wall ${code_path.str}`,
+        );
+        result.stderr = stderr;
+        result.stdout = stdout;
+    } catch (err) {
+        return new Response(JSON.stringify({ error: err.stdout }), {
+            status: 503,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
     }
 
     try {
-      const { stdout, stderr } = await exec(`./build/c/${out_name}`);
-      if (stderr !== "") {
-        result.stderr += stderr;
-      }
+        const { stdout, stderr } = await exec(out_path.str);
+        if (stderr !== '') {
+            result.stderr += stderr;
+        }
 
-      result.stdout = stdout
-      console.dir(result);
-
+        result.stdout = stdout;
     } catch (e) {
-      console.dir(e)
+        console.dir(e);
     }
 
     return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
-  }
-
-  return new Response(JSON.stringify({ error: "no code provided" }), {
-    status: 503,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-}
+};

@@ -8,10 +8,10 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), mdx()],
-  output: 'server',
+    integrations: [react(), mdx()],
+    output: 'server',
 
-  adapter: node({
-    mode: 'standalone',
-  }),
+    adapter: node({
+        mode: 'standalone',
+    }),
 });
