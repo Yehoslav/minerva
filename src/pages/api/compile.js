@@ -5,6 +5,8 @@ import fs from 'node:fs';
 import child_process from 'node:child_process';
 import { promisify } from 'node:util';
 
+import crypto from "node:crypto"
+
 /** @type {(cmd: string) => Promise<{stdout: string, stderr: string}>} */
 const exec = promisify(child_process.exec);
 
@@ -68,8 +70,18 @@ class Path {
  */
 
 /** @type {import("astro").APIRoute} */
-export const POST = async ({ request }) => {
+export const POST = async ({ request, cookies }) => {
     const data = await request.json();
+
+    const id = crypto.randomBytes(16).toString("hex")
+    if (!cookies.has('session-id'))
+    cookies.set('session-id', id, {
+        httpOnly: true,
+        sameSite: "strict",
+        path: "/",
+    })
+
+    console.log(cookies.get('session-id'))
 
     /** @type {Response} */
     let result = {
@@ -82,7 +94,10 @@ export const POST = async ({ request }) => {
     const cache_dir = new Path('/tmp/minerva');
 
     // TODO: Get the session id from cookies, or create one if such doesn't exist
-    const temporary_session_id = 'session-id-1234';
+    const temporary_session_id = cookies.get('session-id')?.value;
+    if (temporary_session_id === undefined) {
+        throw new Error("Session id is undefined")
+    }
     const session_dir = cache_dir.extend_dir(temporary_session_id);
 
     if (data.code === undefined) {

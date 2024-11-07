@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import PracticePane from '@components/PracticePane.jsx';
 
+
 const { slug } = Astro.params;
 if (slug === undefined) {
     throw new Error('Slug should always be present!');
@@ -16,7 +17,7 @@ if (lesson === undefined) {
     return Astro.redirect('/topics/c-intro/');
 }
 
-const Content = lesson.Content;
+const Content = lesson?.Content;
 
 const ex = lesson.exercises;
 
@@ -29,6 +30,7 @@ if (ex != undefined && initialCode === undefined) {
         'Exercise given with no initial code. Leave at least a comment!',
     );
 }
+
 ---
 
 <Layout title="Welcome to Astro.">
@@ -38,6 +40,8 @@ if (ex != undefined && initialCode === undefined) {
 
     <div class="container">
         <a href="/topics/c-intro/">Back</a>
+
+        <p>{Astro.cookies.get("session-id")?.value ?? "unknown session id"}</p>
 
         <h1>{lesson.frontmatter.title}</h1>
 
