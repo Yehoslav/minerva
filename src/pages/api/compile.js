@@ -98,7 +98,6 @@ export const POST = async ({ request, cookies }) => {
     }
     const session_dir = cache_dir.extend_dir(temporary_session_id);
 
-    let code = ""
     if (data.code === undefined) {
         return new Response(JSON.stringify({ error: 'no code provided' }), {
             status: 500,
@@ -107,46 +106,11 @@ export const POST = async ({ request, cookies }) => {
             },
         });
     }
-    code = data.code
-
-    console.log("exId:", data.exId)
-    if (data.exId === undefined) {
-        return new Response(JSON.stringify({ error: 'no exId provided' }), {
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    }
-
-    const matches = import.meta.glob('/src/content/c-intro/*.mdx', {
-        eager: true,
-    });
-
-
-    const lesson = matches[`/src/content/${data.exId}.mdx`];
-    if (lesson === undefined) {
-        return new Response(JSON.stringify({ stderr: "could not find exercise", err_kind: "compiletime" }), {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    }
-
-    let expected_out = undefined
-    if (lesson?.exercises.at(0).test_data !== undefined) {
-        const input_data = lesson?.exercises.at(0).test_data.at(0).input_data
-        const include = Object.keys(input_data).map(k => `#define ${k} ${input_data[k]}`).join("\n")
-        code = include + "\n\n" + code
-        expected_out = lesson?.exercises.at(0).test_data.at(0).expected_output
-    }
-    console.log(expected_out)
 
     const code_name = "main.c";
     const code_dir = session_dir.extend_dir('code');
     const code_path = code_dir.extend_file(code_name);
-    fs.writeFileSync(code_path.str, code);
+    fs.writeFileSync(code_path.str, data.code);
 
     const out_name = 'a.out';
     const out_dir = session_dir.extend_dir('bin');
@@ -180,13 +144,7 @@ export const POST = async ({ request, cookies }) => {
             result.stderr += stderr;
         }
 
-        if (expected_out === undefined) {
-            result.stdout = stdout
-        } else if (stdout !== expected_out) {
-            result.stdout = `test failed:\nexpected output: ${expected_out}\nstdout: ${stdout}`;
-        } else {
-           result.stdout  = "1 of 1 tests succesfull"
-        }
+        result.stdout = stdout;
     } catch (e) {
         result.err_kind = 'runtime';
         result.stderr += e.stderr;

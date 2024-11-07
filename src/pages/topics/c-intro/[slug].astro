@@ -1,29 +1,29 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import PracticePane from '@components/PracticePane.jsx';
+import Header from '@components/Header.astro';
 
 const { slug } = Astro.params;
 if (slug === undefined) {
     throw new Error('Slug should always be present!');
 }
 
-const matches = await import.meta.glob('/src/content/c-intro/*.mdx', {
+const matches = await import.meta.glob('/src/content/classes/c-intro/*.mdx', {
     eager: true,
 });
 
-const lesson = matches[`/src/content/c-intro/${slug}.mdx`];
+const lesson = matches[`/src/content/classes/c-intro/${slug}.mdx`];
 if (lesson === undefined) {
     return Astro.redirect('/topics/c-intro/');
 }
 
 const Content = lesson?.Content;
 
-const ex = lesson.exercises;
+const ex = lesson.exercises?.at(0);
 
-const condition = ex?.at(0).condition ?? '';
+const condition = ex.condition ?? '';
 
-const includeCode: string | undefined = ex?.at(0).include_code?.trim();
-const initialCode: string = ex?.at(0).init_code?.trim() ?? '';
+const initialCode: string = ex.init_code?.trim() ?? '';
 if (ex != undefined && initialCode === '') {
     throw Error(
         'Exercise given with no initial code. Leave at least a comment!',
@@ -32,7 +32,7 @@ if (ex != undefined && initialCode === '') {
 ---
 
 <Layout title="Welcome to Astro.">
-    <!-- TODO: Implement Header -->
+    <Header />
 
     <div class="container">
         <div>
@@ -55,7 +55,7 @@ if (ex != undefined && initialCode === '') {
 
                         <PracticePane
                             client:load
-                            check={true}
+                            check={ex.test_data !== undefined}
                             exId={`c-intro/${slug}`}
                             initialCode={initialCode}
                         />

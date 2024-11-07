@@ -1,21 +1,28 @@
 ---
-const matches = await import.meta.glob('src/content/c-intro/*.mdx', {
+import Header from '@components/Header.astro';
+import Layout from '@layouts/Layout.astro';
+
+const matches = await import.meta.glob('src/content/classes/c-intro/*.mdx', {
     eager: true,
 });
 const posts = Object.values(matches);
 ---
 
-<ul>
-    {
-        posts.map(function (post) {
-            const slug = post.url.split('/').at(-1).split('.').at(0);
-            return (
-                <li>
-                    <a href={`/topics/c-intro/${slug}`}>
-                        {post.frontmatter.title}
-                    </a>
-                </li>
-            );
-        })
-    }
-</ul>
+<Layout title="C Introduction">
+    <Header />
+
+    <ul>
+        {
+            posts.map(function (post) {
+                const slug = post.url.split('/').at(-1).split('.').at(0);
+                return (
+                    <li>
+                        <a href={`/topics/c-intro/${slug}`}>
+                            {post.frontmatter.title}
+                        </a>
+                    </li>
+                );
+            })
+        }
+    </ul>
+</Layout>

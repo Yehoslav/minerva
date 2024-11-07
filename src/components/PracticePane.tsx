@@ -9,10 +9,16 @@ import 'prismjs/themes/prism.css'; //Example style, you can use another
 
 const { highlight, languages } = prism;
 
-export default function MyEditor({ initialCode, exId, check }: { check?: boolean, exId: string, initialCode: string }) {
-    const [code, setCode] = React.useState(
-        initialCode ?? `// your code here`,
-    );
+export default function MyEditor({
+    initialCode,
+    exId,
+    check,
+}: {
+    check?: boolean;
+    exId: string;
+    initialCode: string;
+}) {
+    const [code, setCode] = React.useState(initialCode ?? `// your code here`);
     const [stderr, setStderr] = React.useState('');
     const [stdout, setStdout] = React.useState('');
 
@@ -82,7 +88,7 @@ export default function MyEditor({ initialCode, exId, check }: { check?: boolean
                 <Editor
                     padding={10}
                     preClassName="codearea"
-                    textareaClassName='codearea'
+                    textareaClassName="codearea"
                     tabSize={4}
                     value={code}
                     onValueChange={setCode}
@@ -97,9 +103,7 @@ export default function MyEditor({ initialCode, exId, check }: { check?: boolean
                     onClick={() => setActive('stderr')}
                 >
                     stderr
-                    {stderr !== '' && (
-                        <span style={bangStyle} >!</span>
-                    )}
+                    {stderr !== '' && <span style={bangStyle}>!</span>}
                 </button>
                 <button
                     style={tabBtnStyle('stdout')}
@@ -110,7 +114,11 @@ export default function MyEditor({ initialCode, exId, check }: { check?: boolean
                 </button>
             </div>
 
-            <div>
+            <div
+                style={{
+                    whiteSpace: 'pre-wrap',
+                }}
+            >
                 {active === 'stdout' && <p className="out">{stdout}</p>}
                 {active === 'stderr' && <p className="out">{stderr}</p>}
             </div>

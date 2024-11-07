@@ -1,14 +1,26 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import Card from '@components/Card.astro';
+import Header from '@components/Header.astro';
 ---
 
 <Layout title="Welcome to Astro.">
-    <h1>Minerva</h1>
+    <Header />
+
+    <main>
+        <h1>Minerva</h1>
+
+        <h2>Courses</h2>
+        <ul>
+            <li><a href="/topics/c-intro/">C Introduction</a></li>
+        </ul>
+
+        <h2>Coding quests</h2>
+        <ul>
+            <li><a href="/quests">To be done</a></li>
+        </ul>
+
+    </main>
 </Layout>
 
 <style is:global>
-    body {
-        white-space: pre-wrap;
-    }
 </style>

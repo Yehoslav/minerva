@@ -152,11 +152,11 @@ export const POST = async ({ request, cookies }) => {
         });
     }
 
-    const matches = import.meta.glob('/src/content/c-intro/*.mdx', {
+    const matches = import.meta.glob('/src/content/classes/c-intro/*.mdx', {
         eager: true,
     });
 
-    const lesson = matches[`/src/content/${data.exId}.mdx`];
+    const lesson = matches[`/src/content/classes/${data.exId}.mdx`];
     if (lesson === undefined) {
         return new Response(
             JSON.stringify({
