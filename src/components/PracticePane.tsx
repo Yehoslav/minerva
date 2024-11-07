@@ -9,9 +9,9 @@ import 'prismjs/themes/prism.css'; //Example style, you can use another
 
 const { highlight, languages } = prism;
 
-export default function MyEditor({ initialCode }: { initialCode: string }) {
+export default function MyEditor({ initialCode, exId, check }: { check?: boolean, exId: string, initialCode: string }) {
     const [code, setCode] = React.useState(
-        initialCode ?? `function add(a, b) {\n  return a + b;\n}`,
+        initialCode ?? `// your code here`,
     );
     const [stderr, setStderr] = React.useState('');
     const [stdout, setStdout] = React.useState('');
@@ -21,16 +21,15 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
     const [active, setActive] = useState<Tabs>('stdout');
 
     function checkCode() {
-        fetch('/api/compile', {
+        const url = check === true ? '/api/compile-check' : '/api/compile';
+        fetch(url, {
             method: 'post',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
 
-            body: JSON.stringify({
-                code,
-            }),
+            body: JSON.stringify({ code, exId }),
         })
             .then((res) => {
                 if (res.ok) {

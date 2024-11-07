@@ -53,32 +53,57 @@ Note that:
 -   6 &lt;= 6 is evaluated to true (1) because 6 is less than or equal to 6
 -   7 &gt;= 7 is evaluated to true(1)
 
-export const exercises = [
-  {
-    condition: `
+export const condition = `
 We want to make sure that our rocket can take off safely. This is done only when all the requirements are checked. 
 1) if wind speed is greater than 100, it's risky, so the rocket won't take off. If wind speed is less than 100 (let's say, 80), we can go to the next step.
 2) if software is not update to the latest version, the rocket won't take off
 3) if we have 4 astronauts inside the ship, then we are good to go
 
 Note: use only one if statement. Update the variables below our declarations to make the rocket take off safely
-`,
-    init_code: `
-#include <stdio.h>
+`;
+
+export const init_code = `#include <stdio.h>
 
 int main() {
-
-    int rocketReadyToTakeOff = 0; // not ready to take off yet - do not change this line
-    int windSpeed = 120;          // wind speed must be below 100 - do not change this line
-    int softwareUpToDate = 0;     // software is not updated it yet - do not change this line
-    int members;                  // no members inside yet - do not change this line
+    int rocketReadyToTakeOff = testValue_RocketReadyToTakeOff;
+    int windSpeed            = testValue_windSpeed;
+    int softwareUpToDate     = testValue_softwareUpToDate;
+    int members              = testValue_members;
     
-    // update variables below
+    // update condition below
     
     if () {
         printf("10 9 8 7 6 5 4 3 2 1... to the staaars!");
+    } else {
+        printf("Waiting for conditions to be met!");
     }
-}
-`,
-},
-]
+}`;
+
+export const test_data = [
+    {
+        input_data: {
+            testValue_RocketReadyToTakeOff: 0,
+            testValue_windSpeed: 120,
+            testValue_softwareUpToDate: 0,
+            testValue_members: 0,
+        },
+        expected_output: 'Waiting for conditions to be met!',
+    },
+    {
+        input_data: {
+            testValue_RocketReadyToTakeOff: 1,
+            testValue_windSpeed: 20,
+            testValue_softwareUpToDate: 1,
+            testValue_members: 4,
+        },
+        expected_output: '10 9 8 7 6 5 4 3 2 1... to the staaars!',
+    },
+];
+
+export const exercises = [
+    {
+        condition,
+        test_data,
+        init_code,
+    },
+];
