@@ -1,6 +1,6 @@
 // @ts-check
 
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 
 import child_process from 'node:child_process';
 import { promisify } from 'node:util';
@@ -11,84 +11,127 @@ const exec = promisify(child_process.exec);
 class Path {
     /** @param {string} path */
     constructor(path) {
-        try {
-            fs.stat(path);
-        } catch {
-            fs.mkdir(path);
+        this.path = path;
+    }
+
+    /**
+     * @param {string} path
+     * @returns {Path}
+     */
+    static build(path) {
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path, { recursive: true });
         }
-        this.path = path
+        return new Path(path);
     }
 
     /**
      * @param {string} subpath
      * @returns {Path}
-     * */
-    extend(subpath) {
-        if (subpath.at(0) === '/') { return new Path(this.path + subpath); }
+     */
+    extend_dir(subpath) {
+        if (subpath.length <= 0) {
+            throw new Error('Cannot extend Path with empty subpath');
+        }
+        if (subpath.at(0) === '/') {
+            return Path.build(this.path + subpath);
+        }
+        return Path.build(this.path + '/' + subpath);
+    }
+
+    /**
+     * @param {string} subpath
+     * @returns {Path}
+     */
+    extend_file(subpath) {
+        if (subpath.length <= 0) {
+            throw new Error('Cannot extend Path with empty subpath');
+        }
+        if (subpath.at(0) === '/') {
+            return new Path(this.path + subpath);
+        }
         return new Path(this.path + '/' + subpath);
     }
 
     get str() {
-        return this.path
+        return this.path;
     }
 }
+
+/** @typedef {'none' | 'compiletime' | 'runtime'} Error_Kind */
+/**
+ * @typedef {Object} Response
+ * @property {Error_Kind} err_kind
+ * @property {string} stderr
+ * @property {string} stdout
+ * @property {string} error
+ */
 
 /** @type {import("astro").APIRoute} */
 export const POST = async ({ request }) => {
     const data = await request.json();
-    let result = {
-        ok: true,
-        stderr: 'empty',
-        stdout: 'empty',
-        value: 'success',
-    };
 
+    /** @type {Response} */
+    let result = {
+        err_kind: 'none',
+        stderr: '',
+        stdout: '',
+        error:  '',
+    };
 
     const cache_dir = new Path('/tmp/minerva');
 
     // TODO: Get the session id from cookies, or create one if such doesn't exist
     const temporary_session_id = 'session-id-1234';
-    const session_dir = cache_dir.extend(temporary_session_id);
-
+    const session_dir = cache_dir.extend_dir(temporary_session_id);
 
     if (data.code === undefined) {
         return new Response(JSON.stringify({ error: 'no code provided' }), {
-            status: 503,
+            status: 500,
             headers: {
                 'Content-Type': 'application/json',
             },
         });
     }
 
-    const code_path = session_dir.extend('code/main.c');
-    await fs.writeFile(code_path.str, data.code);
+    const code_name = "main.c";
+    const code_dir = session_dir.extend_dir('code');
+    const code_path = code_dir.extend_file(code_name);
+    fs.writeFileSync(code_path.str, data.code);
 
-    const out_path = session_dir.extend('bin/main');
+    const out_name = 'a.out';
+    const out_dir = session_dir.extend_dir('bin');
+    const out_path = out_dir.extend_file(out_name);
 
     try {
         // TODO: compile using bwrap, so that session id is not exposed in the error messages
-        const { stderr, stdout } = await exec(
-            `cc -o ${out_path.str} -Wall ${code_path.str}`,
+        const { stdout, stderr } = await exec(
+            `bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${code_dir.str} /src --bind ${out_dir.str} /bin cc -o /bin/${out_name} -Wall /src/${code_name}`
         );
-        result.stderr = stderr;
-        result.stdout = stdout;
+        result.stderr += stderr;
+        result.stdout += stdout;
     } catch (err) {
-        return new Response(JSON.stringify({ error: err.stdout }), {
-            status: 503,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        if (err !== null && err !== undefined && err.hasOwnProperty('stderr')) {
+            return new Response(JSON.stringify({ stderr: err.stderr, err_kind: "compiletime" }), {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        }
     }
 
     try {
-        const { stdout, stderr } = await exec(out_path.str);
+        const { stdout, stderr } = await exec(`bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${out_dir.str} /bin /bin/${out_name}`);
         if (stderr !== '') {
+            result.err_kind = 'runtime';
             result.stderr += stderr;
         }
 
         result.stdout = stdout;
     } catch (e) {
+        result.err_kind = 'runtime';
+        result.stderr += e.stderr;
         console.dir(e);
     }
 

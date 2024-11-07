@@ -22,7 +22,7 @@ const ex = lesson.exercises;
 
 const condition = ex?.at(0).condition ?? '';
 
-const initialCode = ex?.at(0).init_code;
+const initialCode = ex?.at(0).init_code?.trim();
 console.log(initialCode);
 if (ex != undefined && initialCode === undefined) {
     throw Error(
@@ -80,7 +80,13 @@ if (ex != undefined && initialCode === undefined) {
     pre {
         padding: 0.5rem;
     }
+
     .out {
         font-family: monospace;
+    }
+
+    .codearea {
+        border: 1px solid black !important;
+        border-radius: 0.3rem;
     }
 </style>

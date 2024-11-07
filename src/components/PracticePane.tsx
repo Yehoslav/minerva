@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Editor from '@components/Editor.jsx';
 
 import prism from 'prismjs/components/prism-core';
@@ -14,7 +14,8 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
     );
     const [stderr, setStderr] = React.useState('');
     const [stdout, setStdout] = React.useState('');
-    const [output, setOutput] = React.useState(undefined);
+    const [errKind, setErrKind] = React.useState(undefined);
+    const [active, setActive] = useState<'stdout' | 'stderr'>('stdout');
 
     function checkCode() {
         fetch('/api/compile', {
@@ -35,9 +36,14 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
                 throw res;
             })
             .then((data) => {
-                setStderr(data.stderr);
-                setStdout(data.stdout);
-                setOutput(data.value);
+                setStderr(data.stderr ?? "");
+                setStdout(data.stdout ?? "");
+                setErrKind(data.err_kind);
+                if (data.err_kind === 'none') {
+                    setActive('stdout');
+                } else {
+                    setActive('stderr');
+                }
             })
             .catch((err) => {
                 console.log('The error is:');
@@ -48,18 +54,68 @@ export default function MyEditor({ initialCode }: { initialCode: string }) {
 
     return (
         <div>
-            <Editor
-                value={code}
-                onValueChange={setCode}
-                highlight={(code: string) => highlight(code, languages.js)}
-            />
+            <div style={{margin: "0.4rem 0"}}>
+                <Editor
+                    padding={10}
+                    preClassName='codearea'
+                    tabSize={4}
+                    value={code}
+                    onValueChange={setCode}
+                    highlight={(code: string) => highlight(code, languages.js)}
+                />
+            </div>
             <button onClick={checkCode}>Submit</button>
-            <h1>Output</h1>
-            <p className="out">{output}</p>
-            <h1>stderr</h1>
-            <p className="out">{stderr}</p>
-            <h1>stdout</h1>
-            <p className="out">{stdout}</p>
+
+            <div>
+                <button
+                    style={{
+                        padding: '0.7rem',
+                        background: 'none',
+                        border: 'none',
+                        borderBottom: active === 'stderr' ? '2px solid green' : 'none',
+                    }}
+                    onClick={() => setActive('stderr')}
+                >
+                    stderr
+                    {stderr !== '' && (
+                        <span
+                            style={{
+                                padding: '0.3rem',
+                                background: 'cyan',
+                                color: 'red',
+                            }}
+                        >
+                            !
+                        </span>
+                    )}
+                </button>
+                <button
+                    style={{
+                        padding: '0.7rem',
+                        background: 'none',
+                        border: 'none',
+                        borderBottom: active === 'stdout' ? '2px solid green' : 'none',
+                    }}
+                    onClick={() => setActive('stdout')}>
+                    stdout
+                    {stdout !== '' && (
+                        <span
+                            style={{
+                                padding: '0.5rem',
+                                background: 'cyan',
+                                color: 'red',
+                            }}
+                        >
+                            !
+                        </span>
+                    )}
+                </button>
+            </div>
+
+            <div>
+                {active === 'stdout' && <p className="out">{stdout}</p>}
+                {active === 'stderr' && <p className="out">{stderr}</p>}
+            </div>
         </div>
     );
 }
