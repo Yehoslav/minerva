@@ -9,12 +9,11 @@ Let's say we don't know.
 ```c
 #include <stdio.h>
 
-int main(){
-
-	int apples;
-	apples = 5;
-
-	printf("%d", apples);
+int main() {
+    int apples;
+    apples = 5;
+    
+    printf("%d", apples);
 }
 ```
 
@@ -25,14 +24,13 @@ On the way home we noticed we must've bought 12 apples, not 5. So we turn back t
 ```c
 #include <stdio.h>
 
-int main(){
-
-	int apples;
-	apples = 5;
-	printf("%d", apples);
-
-	apples = apples + 7;
-	printf("%d", apples);
+int main() {
+    int apples;
+    apples = 5;
+    printf("%d", apples);
+    
+    apples = apples + 7;
+    printf("%d", apples);
 }
 ```
 
@@ -44,24 +42,19 @@ Now apples is not 5 anymore, but 12.
 
 ---
 
-```c
-
-```
-
 export const exercises = [
   {
     condition: `The programm shown below is not working. Fix it so it prints 15.`,
     init_code: `
-      #include <stdio.h>
+#include <stdio.h>
 
-      int main(){
-        int x;
-        x = 10;
+int main(){
+    int x;
+    x = 10;
 
-        x =  ;
-        printf("%d", x);
-      }
-    `,
-
+    x =  ;
+    printf("%d", x);
+}
+`,
 },
 ]

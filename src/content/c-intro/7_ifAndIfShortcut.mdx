@@ -6,23 +6,23 @@ title: 'If and If Shortcut'
 #include <stdio.h>
 
 int main(){
-	int thirsty = 1; // 1 means I am thirsty, 0 means I am not
-	int isBottleOpen = 0; // bottle is not open
-	int isWaterCold = 1; // water is cold
-	int permission = 0; // teacher doesn't allow me to drink water yet
+    int thirsty = 1; // 1 means I am thirsty, 0 means I am not
+    int isBottleOpen = 0; // bottle is not open
+    int isWaterCold = 1; // water is cold
+    int permission = 0; // teacher doesn't allow me to drink water yet
 
-	permission = 1; // teacher gives me permission to drink
-	isBottleOpen = 1; // now I can open the bottle
+    permission = 1; // teacher gives me permission to drink
+    isBottleOpen = 1; // now I can open the bottle
 
-	if(thirsty == 1){
-		if(isBottleOpen == 1){
-			if(isWaterCold == 1){
-				if(permission == 1){
-					printf("I can drink water");
-				}
-			}
-		}
-	}
+    if(thirsty == 1){
+        if(isBottleOpen == 1){
+            if(isWaterCold == 1){
+                if(permission == 1){
+                    printf("I can drink water");
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -32,17 +32,17 @@ This is from our last lesson. Some programmers like to write this on a single li
 #include <stdio.h>
 
 int main(){
-	int thirsty = 1; // 1 means I am thirsty, 0 means I am not
-	int isBottleOpen = 0; // bottle is not open
-	int isWaterCold = 1; // water is cold
-	int permission = 0; // teacher doesn't allow me to drink water yet
+    int thirsty = 1; // 1 means I am thirsty, 0 means I am not
+    int isBottleOpen = 0; // bottle is not open
+    int isWaterCold = 1; // water is cold
+    int permission = 0; // teacher doesn't allow me to drink water yet
 
-	permission = 1; // teacher gives me permission to drink
-	isBottleOpen = 1; // now I can open the bottle
+    permission = 1; // teacher gives me permission to drink
+    isBottleOpen = 1; // now I can open the bottle
 
-	if(thirsty == 1 && isBottleOpen == 1 && isWaterCold == 1 && permission == 1){
-		printf("I can drink water");
-	}
+    if(thirsty == 1 && isBottleOpen == 1 && isWaterCold == 1 && permission == 1){
+        printf("I can drink water");
+    }
 }
 ```
 
@@ -68,17 +68,16 @@ Note: use only one if statement. Update the variables below our declarations to 
 
 int main() {
 
-    int rocketReadyToTakeOff = 0; 	// not ready to take off yet - do not change this line
-    int windSpeed = 120; 		// wind speed must be below 100 - do not change this line
-    int softwareUpToDate = 0; 	// software is not updated it yet - do not change this line
-    int members; 			// no members inside yet - do not change this line
-
+    int rocketReadyToTakeOff = 0; // not ready to take off yet - do not change this line
+    int windSpeed = 120;          // wind speed must be below 100 - do not change this line
+    int softwareUpToDate = 0;     // software is not updated it yet - do not change this line
+    int members;                  // no members inside yet - do not change this line
+    
     // update variables below
-
+    
     if () {
-    	printf("10 9 8 7 6 5 4 3 2 1... to the staaars!");
+        printf("10 9 8 7 6 5 4 3 2 1... to the staaars!");
     }
-
 }
 `,
 },

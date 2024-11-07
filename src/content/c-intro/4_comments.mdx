@@ -7,30 +7,23 @@ Comments don't affect the flow of a program.
 ```c
 #include <stdio.h>
 
-int main(){ // this is where the program start running from
-
-	// below you can see another way of declaring variables
-	// but this style is highly avoided
-	// the explanation is quite beyond the scope of this lesson
-	int x, y, z;
-
-	printf("%d", x);
-	// we simply don't do this. We don't ever try to print
-	// variables that are not initialized with a value
-
-
-	// printf("Am I getting printed?")
-	// this printf won't ever get printed in the terminal
-	// because the instruction is commented
-
+int main() { // this is where the program start running from
+    // below you can see another way of declaring variables
+    // but this style is highly avoided
+    // the explanation is quite beyond the scope of this lesson
+    int x, y, z;
+    
+    printf("%d", x);
+    // we simply don't do this. We don't ever try to print
+    // variables that are not initialized with a value
+    
+    // printf("Am I getting printed?")
+    // this printf won't ever get printed in the terminal
+    // because the instruction is commented
 }
 ```
 
 So everytime we want to explain parts of our code, for us or for other programmers, we use comments. Since they are ignored by the compiler, we can disable some statements or blocks by commenting them. If we want to test the program without a specific part, instead of deleting it, we can comment it and the compiler skips over.
-
-```c
-
-```
 
 export const exercises = [
   {
@@ -39,12 +32,11 @@ export const exercises = [
 #include <stdio.h>
 
 int main() {
-int x = 4;
-x = x \* 10;
-
+    int x = 4;
+    x = x \* 10;
+    
     int x = 20;
     printf("%d", x);
-
 }
 `,
 },

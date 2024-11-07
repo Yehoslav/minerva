@@ -24,7 +24,6 @@ const ex = lesson.exercises;
 const condition = ex?.at(0).condition ?? '';
 
 const initialCode = ex?.at(0).init_code?.trim();
-console.log(initialCode);
 if (ex != undefined && initialCode === undefined) {
     throw Error(
         'Exercise given with no initial code. Leave at least a comment!',
@@ -90,6 +89,9 @@ if (ex != undefined && initialCode === undefined) {
     }
 
     .codearea {
+        font-family: monospace !important;
+        font-size: 1rem !important;
+
         border: 1px solid black !important;
         border-radius: 0.3rem;
     }
