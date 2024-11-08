@@ -1,6 +1,6 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import PracticePane from '@components/PracticePane.jsx';
+import PracticePane from '@components/PracticePane';
 import Header from '@components/Header.astro';
 
 const { slug } = Astro.params;
@@ -8,7 +8,7 @@ if (slug === undefined) {
     throw new Error('Slug should always be present!');
 }
 
-const matches = await import.meta.glob('/src/content/classes/c-intro/*.mdx', {
+const matches = import.meta.glob('/src/content/classes/c-intro/*.mdx', {
     eager: true,
 });
 
@@ -17,13 +17,11 @@ if (lesson === undefined) {
     return Astro.redirect('/topics/c-intro/');
 }
 
-const Content = lesson?.Content;
+const { Content, exercises: ex, frontmatter } = lesson;
 
-const ex = lesson.exercises?.at(0);
+const condition = ex.at(0).condition ?? '';
 
-const condition = ex.condition ?? '';
-
-const initialCode: string = ex.init_code?.trim() ?? '';
+const initialCode: string = ex.at(0).init_code?.trim() ?? '';
 if (ex != undefined && initialCode === '') {
     throw Error(
         'Exercise given with no initial code. Leave at least a comment!',
@@ -34,43 +32,52 @@ if (ex != undefined && initialCode === '') {
 <Layout title="Welcome to Astro.">
     <Header />
 
-    <div class="container">
-        <div>
-            <a href="/topics/">Topics</a> /
-            <a href="/topics/c-intro/">C Introduction</a> /
-            <span>{lesson.frontmatter.title}</span>
-        </div>
-
-        <h1>{lesson.frontmatter.title}</h1>
-
-        <div class="split">
-            <div class:list={[{ half: ex === undefined }]}>
-                <Content />
+    <main class="full">
+        <div class="container">
+            <div class="breadcrums">
+                <a href="/topics/">Topics</a> /
+                <a href="/topics/c-intro/">C Introduction</a> /
+                <span>{frontmatter.title}</span>
             </div>
 
-            {
-                ex && (
-                    <div class="editor">
-                        <div>{condition}</div>
+            <h1>{frontmatter.title}</h1>
 
-                        <PracticePane
-                            client:load
-                            check={ex.test_data !== undefined}
-                            exId={`c-intro/${slug}`}
-                            initialCode={initialCode}
-                        />
-                    </div>
-                )
-            }
+            <div class="split">
+                <div class:list={[{ half: ex !== undefined }]}>
+                    <Content />
+                </div>
+
+                {
+                    ex && (
+                        <div class="editor">
+                            <div>{condition}</div>
+
+                            <PracticePane
+                                client:load
+                                check={ex.test_data !== undefined}
+                                exId={`c-intro/${slug}`}
+                                initialCode={initialCode}
+                            />
+                        </div>
+                    )
+                }
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- TODO: Implement Footer -->
 </Layout>
 
 <style>
+    .breadcrums {
+        display: flex;
+        flex-direction: row;
+        padding: 1rem 0 0.5rem 0;
+        column-gap: 0.5rem;
+    }
+
     .container {
-        padding: 0 2rem;
+        margin: 0 2rem;
     }
 
     .split {
@@ -78,14 +85,16 @@ if (ex != undefined && initialCode === '') {
         flex-direction: column;
         gap: 1rem;
     }
+
     .half {
-        width: 50%;
+        max-width: 100%;
     }
 
-    @media only screen and (min-width: 1200px) {
+    @media (min-width: 1024px) {
         .half {
-            width: 100%;
+            width: 50%;
         }
+
         .split {
             flex-direction: row;
         }

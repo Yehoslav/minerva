@@ -23,24 +23,65 @@ const { title } = Astro.props;
 
 <style is:global>
     :root {
-        --accent: 136, 58, 234;
-        --accent-light: 224, 204, 250;
-        --accent-dark: 49, 10, 101;
-        --accent-gradient: linear-gradient(
-            45deg,
-            rgb(var(--accent)),
-            rgb(var(--accent-light)) 30%,
-            white 60%
-        );
+        --primary: rgb(30 3 33);
+        --secondary: rgb(15 82 87);
+        --background: rgb(249 245 255);
+        --foreground: rgb(0 0 0);
+        --accent: rgb(116 141 205);
+        --accent2: rgb(163 56 95);
     }
 
     html {
         font-family: system-ui, sans-serif;
     }
+    main {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    @media (min-width: 640px) { 
+        main:not(.full) {
+            width: 640px;
+        }
+    }
+
+    @media (min-width: 768px) { 
+        main:not(.full) {
+            width: 768px;
+        }
+    }
+
+    @media (min-width: 1024px) { 
+        main:not(.full) {
+            width: 768px;
+        }
+    }
+
+    @media (min-width: 1280px) { 
+        main:not(.full) {
+            width: 768px;
+        }
+    }
+
+    @media (min-width: 1536px) { 
+        main:not(.full) {
+            width: 768px;
+        }
+    }
 
     body {
         margin: 0;
         padding: 0;
+        background: var(--background);
+        color: var(--foreground);
+    }
+
+    a {
+        color: var(--accent);
+    }
+
+    a:visited {
+        color: var(--accent2);
     }
 
     code {

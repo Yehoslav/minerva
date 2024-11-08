@@ -1,25 +1,78 @@
 ---
-
+function is_active(url: string): boolean {
+    return Astro.url.pathname === url;
+}
+const links = [
+    { url: '/', name: 'Home' },
+    { name: 'Topics', url: '/topics' },
+    { name: 'Coding Quests', url: '/quests' },
+];
 ---
 
 <nav>
     <div class="content">
-        <a href="/" style={{ height: 'fit-content' }}><h1>Minerva</h1></a>
+        <a class="logo" href="/">Minerva</a>
 
         <div class="btn-group">
-            <a href="/">Home</a>
-            <a href="/topics">Topics</a>
-            <a href="/quests">Code Quests</a>
+            {
+                links.map(function (link) {
+                    return (
+                        <a
+                            class:list={[{ active: is_active(link.url) }]}
+                            href={link.url}
+                        >
+                            {link.name}
+                        </a>
+                    );
+                })
+            }
         </div>
     </div>
 </nav>
 
 <style>
-    h1 {
+    a.logo {
+        font-size: 2rem;
+        font-weight: 800;
+        height: 100%;
+        align-content: center;
     }
 
     nav {
-        background: yellow;
+        background: var(--primary);
+    }
+
+    .content * {
+        box-sizing: border-box;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: var(--background);
+    }
+
+    div.btn-group {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    div.btn-group a {
+        display: block;
+        height: 100%;
+        align-content: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+
+        padding: 0 1rem;
+    }
+
+    div.btn-group a:hover {
+        background: hsl(291deg 23.81% 16.47%);
+    }
+
+    div.btn-group a.active {
+        background: hsl(290.53deg 17.76% 20.98%);
     }
 
     .content {
@@ -27,14 +80,12 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
 
-        height: 3.4rem;
+        height: 3.8rem;
         width: 800px;
     }
 
     @media screen and (min-width: 1000px) {
-        
         .content {
             width: 1000px;
         }
