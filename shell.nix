@@ -8,12 +8,12 @@ mkShell {
     bubblewrap
 
     emmet-ls
-    nodejs-slim
     tailwindcss-language-server
-    pnpm
 
     quick-lint-js
 
+    pnpm
+    nodejs-slim
     nodePackages.typescript-language-server 
     nodePackages.vscode-langservers-extracted
   ];

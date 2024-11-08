@@ -7,7 +7,6 @@ import { promisify } from 'node:util';
 
 import crypto from "node:crypto"
 
-/** @type {(cmd: string) => Promise<{stdout: string, stderr: string, error: string}>} */
 const exec = promisify(child_process.exec);
 
 class Path {
@@ -114,16 +113,15 @@ export const POST = async ({ request, cookies }) => {
 
     const out_name = 'a.out';
     const out_dir = session_dir.extend_dir('bin');
-    const out_path = out_dir.extend_file(out_name);
+    // const out_path = out_dir.extend_file(out_name);
 
     try {
         if (!fs.existsSync("/nix/store")) {
             throw new Error("The system is not NixOS, update the paths for bwrap!!!")
         }
-        const { stdout, stderr, error } = await exec(
+        const { stdout, stderr } = await exec(
             `bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${code_dir.str} /src --bind ${out_dir.str} /bin cc -o /bin/${out_name} -Wall /src/${code_name}`
         );
-        console.log('stdout:', stdout, '\nstderr:', stderr, '\nerror:', error)
         result.stderr += stderr;
         result.stdout += stdout;
     } catch (err) {
@@ -138,7 +136,7 @@ export const POST = async ({ request, cookies }) => {
     }
 
     try {
-        const { stdout, stderr, error } = await exec(`bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${out_dir.str} /bin /bin/${out_name}`);
+        const { stdout, stderr } = await exec(`bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${out_dir.str} /bin /bin/${out_name}`);
         if (stderr !== '') {
             result.err_kind = 'runtime';
             result.stderr += stderr;

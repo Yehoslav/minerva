@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Editor from '@components/Editor.jsx';
 
-import prism from 'prismjs/components/prism-core';
+import prism  from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-c';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css'; //Example style, you can use another
 
-const { highlight, languages } = prism;
+const { highlight, languages } = prism
 
-export default function MyEditor({
+export default function PracticePane({
     initialCode,
     exId,
     check,
@@ -92,7 +92,9 @@ export default function MyEditor({
                     tabSize={4}
                     value={code}
                     onValueChange={setCode}
-                    highlight={(code: string) => highlight(code, languages.c)}
+                    highlight={(code: string) =>
+                        highlight(code, languages.c, 'c')
+                    }
                 />
             </div>
             <button onClick={checkCode}>Submit</button>
@@ -122,6 +124,7 @@ export default function MyEditor({
                 {active === 'stdout' && <p className="out">{stdout}</p>}
                 {active === 'stderr' && <p className="out">{stderr}</p>}
             </div>
+            <p>errKind: {errKind}</p>
         </div>
     );
 }

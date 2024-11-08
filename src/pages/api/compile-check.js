@@ -7,7 +7,6 @@ import { promisify } from 'node:util';
 
 import crypto from 'node:crypto';
 
-/** @type {(cmd: string) => Promise<{stdout: string, stderr: string, error: string}>} */
 const exec = promisify(child_process.exec);
 
 class Path {
@@ -94,7 +93,7 @@ async function checkCode(session_dir, code, expected_out) {
         `bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${code_dir.str} /src --bind ${out_dir.str} /bin cc -o /bin/${out_name} -Wall /src/${code_name}`,
     );
 
-    const { stdout, stderr, error } = await exec(
+    const { stdout, stderr } = await exec(
         `bwrap --unshare-all --ro-bind /nix/store /nix/store --ro-bind ${out_dir.str} /bin /bin/${out_name}`,
     );
     if ( expected_out === stdout) {
@@ -142,7 +141,6 @@ export const POST = async ({ request, cookies }) => {
         });
     }
 
-    console.log('exId:', data.exId);
     if (data.exId === undefined) {
         return new Response(JSON.stringify({ error: 'no exId provided' }), {
             status: 500,
@@ -156,8 +154,8 @@ export const POST = async ({ request, cookies }) => {
         eager: true,
     });
 
-    const lesson = matches[`/src/content/classes/${data.exId}.mdx`];
-    if (lesson === undefined) {
+    const { exercises } = matches[`/src/content/classes/${data.exId}.mdx`];
+    if (exercises === undefined) {
         return new Response(
             JSON.stringify({
                 stderr: 'could not find exercise',
@@ -172,12 +170,12 @@ export const POST = async ({ request, cookies }) => {
         );
     }
 
-    const total_tests = Object.keys(lesson?.exercises?.at(0)?.test_data).length;
+    const total_tests = Object.keys(exercises?.at(0)?.test_data).length;
     let passed_test = 0
     let fail = false
 
-    if (lesson?.exercises?.at(0)?.test_data !== undefined) {
-        for (let test of lesson?.exercises.at(0).test_data) {
+    if (exercises?.at(0)?.test_data !== undefined) {
+        for (let test of exercises.at(0).test_data) {
             const input_data = test.input_data;
             const expected_out = test.expected_output;
 
@@ -185,7 +183,6 @@ export const POST = async ({ request, cookies }) => {
                 .map((k) => `#define ${k} ${input_data[k]}`)
                 .join('\n');
             const code = include + '\n\n' + data.code;
-            console.log(code)
             let res;
             try {
                 res = await checkCode(session_dir, code, expected_out);
