@@ -54,7 +54,7 @@ if (ex != undefined && initialCode === '') {
 
                             <PracticePane
                                 client:load
-                                check={ex.test_data !== undefined}
+                                check={ex.at(0)?.test_data !== undefined}
                                 exId={`c-intro/${slug}`}
                                 initialCode={initialCode}
                             />

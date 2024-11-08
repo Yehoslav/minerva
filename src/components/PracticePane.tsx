@@ -124,7 +124,6 @@ export default function PracticePane({
                 {active === 'stdout' && <p className="out">{stdout}</p>}
                 {active === 'stderr' && <p className="out">{stderr}</p>}
             </div>
-            <p>errKind: {errKind}</p>
         </div>
     );
 }
